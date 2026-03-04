@@ -1,6 +1,7 @@
-<?php session_start(); 
+<?php 
+session_start(); 
 
- if (isset($_SESSION['errors'])): ?>
+if (isset($_SESSION['errors'])): ?>
   <div class="toast-message error">
     <?= htmlspecialchars(implode(" • ", $_SESSION['errors'])) ?>
   </div>
@@ -13,7 +14,6 @@
   </div>
   <?php unset($_SESSION['success']); ?>
 <?php endif; ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -38,28 +38,20 @@
   transform: translateY(-20px);
   animation: slideDown 0.4s forwards, fadeOut 0.5s ease 3s forwards;
 }
-.toast-message.error {
-  background: #d32f2f; 
-}
-.toast-message.success {
-  background: #388e3c; 
-}
-@keyframes slideDown {
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeOut {
-  to { opacity: 0; transform: translateY(-20px); }
-}
+.toast-message.error { background: #d32f2f; }
+.toast-message.success { background: #388e3c; }
+@keyframes slideDown { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
 </style>
 </head>
 <body class="bg-gray-100">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="index.php">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Flipkart_logo.png" alt="logo" class="me-2" style="height:35px;">
-      <span class="fw-bold">ToyStore</span>
-    </a>
+    <img src="logo.png" alt="ToyStore Logo"
+     class="img-fluid"
+     style="height: 60px; width: 90px; object-fit: contain;">
+
     <form class="d-flex mx-auto w-50" role="search">
       <input class="form-control" id="search" type="search" placeholder="Search for toys, brands and more">
     </form>
@@ -81,14 +73,17 @@
       <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="toys" class="w-40 mx-auto animate-bounce">
     </div>
 
+    <!-- Right: Login Form -->
     <div class="p-8">
       <h3 class="text-2xl font-bold mb-6 text-center">Login</h3>
-      <form action="../backend/auth.php" method="POST" class="space-y-4">
+      <form id="loginForm" action="../backend/auth.php" method="POST" class="space-y-4">
         <div>
-          <input type="email" name="email" class="form-control py-2" placeholder="Email" required>
+          <input type="email" name="email" id="email" class="form-control py-2" placeholder="Email">
+          <small class="text-danger" id="emailError"></small>
         </div>
         <div>
-          <input type="password" name="password" class="form-control py-2" placeholder="Password" required>
+          <input type="password" name="password" id="password" class="form-control py-2" placeholder="Password">
+          <small class="text-danger" id="passwordError"></small>
         </div>
         <div class="flex justify-between text-sm">
           <label><input type="checkbox" name="remember"> Remember me</label>
@@ -98,7 +93,6 @@
         <p class="text-center text-sm mt-3">New user? <a href="register.php" class="text-blue-600 hover:underline">Create account</a></p>
       </form>
     </div>
-
   </div>
 </div>
 
@@ -141,6 +135,39 @@
     © 2025 ToyStore — Inspired by Flipkart Clone
   </div>
 </footer>
+
+<script>
+// Client-side validation
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  let valid = true;
+
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const emailError = document.getElementById("emailError");
+  const passwordError = document.getElementById("passwordError");
+
+  emailError.textContent = "";
+  passwordError.textContent = "";
+
+  if (email.value.trim() === "") {
+    emailError.textContent = "Email is required";
+    valid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    emailError.textContent = "Invalid email format";
+    valid = false;
+  }
+
+  if (password.value.trim() === "") {
+    passwordError.textContent = "Password is required";
+    valid = false;
+  } else if (password.value.length < 6) {
+    passwordError.textContent = "Password must be at least 6 characters";
+    valid = false;
+  }
+
+  if (!valid) e.preventDefault();
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -5,7 +5,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once "db.php";
 
-// ===================== REGISTER =====================
 if (isset($_POST['register'])) {
     $name     = trim($_POST['name']);
     $email    = trim($_POST['email']);
@@ -78,7 +77,6 @@ if (isset($_POST['register'])) {
     }
 }
 
-// ===================== LOGIN =====================
 if (isset($_POST['login'])) {
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
@@ -123,7 +121,6 @@ if (isset($_POST['login'])) {
     }
 }
 
-// ===================== LOGOUT =====================
 if (isset($_GET['logout'])) {
     $_SESSION = [];
     session_unset();
